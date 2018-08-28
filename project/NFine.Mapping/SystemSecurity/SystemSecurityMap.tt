@@ -1,0 +1,44 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ assembly name="System.Data.dll" #>
+<#@ assembly name="System.Data.DataSetExtensions.dll" #>
+<#@ assembly name="System.Xml.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ include file="$(SolutionDir)NFine.Data\Extensions\DbHelperSecurity.ttinclude"  #>
+
+
+using NFine.Domain.Entity.SystemSecurity;
+using System.Data.Entity.ModelConfiguration;
+namespace NFine.Mapping.SystemSecurity
+{    
+<# foreach(string str in config.TableName.Split(new char[] { ','},StringSplitOptions.RemoveEmptyEntries)){#>
+
+<# 
+    var dbTableName=str;
+    var tableName=str.Replace("Sys_","")+"Map";
+    var entity=str.Replace("Sys_","")+"Entity";
+    var list=  DbHelper.GetDbColumns(config.ConnectionString, config.DbDatabase, dbTableName);
+    var pk = DbHelper.GetPrimaryKey(list);
+ #>
+
+    /// <summary>
+    /// <#=tableName#>
+    /// </summary>    
+    public partial class <#=tableName#>:EntityTypeConfiguration<<#=entity#>>
+    {
+       public <#=tableName#>()
+       {
+          this.ToTable("<#=dbTableName#>");
+          this.HasKey(t=>t.<#=pk#>);
+       }
+    }
+		<#}#> 
+}

@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    $(function () {
+        getAll();
+        $("#F_Project").change(function () {
+            var val = $(this).val();
+            $.ajax({
+                url: "/Test/ChangeProject",
+                type: "POST",
+                data: {
+                    Sign: val
+                },
+                success: function (result) {
+                    alert(result)
+                    $.parseJSON(result);
+                    var data = JSON.parse(result);
+                    alert(data.message);
+                }
+            })
+        })
+
+
+    })
+
+    function btn_edit() {
+        $.ajax({
+            url: "/Test/AddProject",
+            type: "POST",
+            data: {
+                ProjectID: "64A1C550-2C61-4A8C-833D-ACD0C012260F",
+                ProjectName: "普华",
+                ProjectSign: "ph"
+            },
+            success: function (result) {
+                alert(result)
+                var data = JSON.parse(result);
+                alert(data.message);
+            }
+        })
+    }
+
+    function btn_details() {
+
+        $.ajax({
+            url: "/Test/UploadBIM",
+            type: "POST",
+            data: {
+                fileUrl: "http://192.168.1.47:2111/templates/test.rvt",
+                fileName: "test",
+                fileExt: ".rvt"
+            },
+            success: function (result) {
+                var data = JSON.parse(result);
+                alert(data.message);
+            }
+        })
+    }
+
+    function btn_Checked() {
+        $.ajax({
+            url: "/Test/PutInStorageConfigure",
+            type: "POST",
+            data: {
+                ProjectSign: "lsxq",
+                BeeName: "test",
+                x: "121.00000000",
+                y: " 31.00000000",
+                z: "7.00000000",
+                VersionName: "1.0",
+                TreeName:"蓝色星球"
+            },
+            success: function (result) {
+                var data = JSON.parse(result);
+                alert(data.message);
+            }
+        })
+    }
+
+    function getAll()
+    {
+        $.ajax({
+            url: "/Test/GetAll",
+            type: "POST",
+            data: {
+
+            },
+            success: function (result) {
+                $("#F_Project").html("");
+                var data = JSON.parse(result);
+                var ListProject = data.ListProject
+                //alert(data)
+                $(ListProject).each(function () {
+                    $("#F_Project").append("<option value=\"" + this.GUID + "\" guid=\"F298F868-B689-4982-8C8B-9268CBF0308D\">" + this.xmName + "</option>")
+                })
+            }
+        })
+    }
+
+</script>
+@*<iframe src="http://192.168.1.47:2000/Risk/dpzs.html?guid=jry" style="width:100%;height:850px"></iframe>*@
+<div>
+    <div>
+        <div>
+            <ul >
+                <li class="first">已选中<span>1</span>项</li>
+                <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>新增项目</a></li>
+                <li>
+                    <select id="F_Project" name="F_Project" class="form-control required">
+                        @*<option value="64A1C550-2C61-4A8C-833D-ACD0C012260F" guid="F298F868-B689-4982-8C8B-9268CBF0308D">蓝色星球</option>
+                        <option value="19EE595A-E775-409D-A48F-B33CF9F262C7" guid="19EE595A-E775-409D-A48F-B33CF9F262C7">普华</option>*@
+                    </select>
+                </li>
+                <li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>上传BIM云</a></li>
+                <li class="split"></li>
+
+                <li><a id="NF-disabled" authorize="yes" onclick="btn_Checked()"><i class="fa fa-stop-circle"></i>入库</a></li>
+                <li><a id="NF-disabled" authorize="yes" onclick="getAll()"><i class="fa fa-stop-circle"></i>获取所有项目</a></li>
+            </ul>
+        </div>
+
+    </div>
+</div>

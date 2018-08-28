@@ -1,0 +1,163 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    $(function () {
+        initControl();
+    });
+    function initControl() {
+        $("#F_DbName").bindSelect()
+        $("#F_BackupType").bindSelect()
+
+        //给上一步下一步绑定点击事件  用的jquery.wizard.js
+        $("#wizard").wizard().on("change", function (e, data) {
+            var $finish = $("#btn_finish");
+            var $next = $("#btn_next");
+            if (data.direction == "next") {
+                switch (data.step) {
+                    case 1:
+                        if (!$('#form1').formValid()) {
+                            return false;
+                        }
+                     
+                        $finish.show();
+                        $next.hide();
+                        $("#F_DbName").bindSelect({ 
+                            url: "/SystemSecurity/DbBackup/GetDatabases",
+                            param: {
+                                F_IP: $("#F_IP").val(),
+                                UserName: $("#UserName").val(),
+                                Password: $("#Password").val(),
+                            }
+                        })
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                $finish.hide();
+                $next.show();
+            }
+        })
+    }
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            loading: "正在备份数据...",
+            url: "/SystemSecurity/DbBackup/SubmitForm",
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+
+
+<form id="form1">
+    <div class="widget-body">
+        <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
+            <ul class="steps">
+                <li data-target="#step-1" class="active"><span class="step">1</span>数据库配置<span class="chevron"></span></li>
+                <li data-target="#step-2"><span class="step">2</span>备份文件<span class="chevron"></span></li>
+            </ul>
+        </div>
+        <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
+            <div id="step-1" class="step-pane active">
+                <div style="margin-bottom: 0px; border-radius: 0px;" class="alert alert-warning alert-dismissable">
+                    <strong>注意：</strong>&nbsp;备份成功后，请将备份文件下载到本地保存！
+                </div>
+                <div style="padding-top: 20px; margin-right: 20px;">
+                    <table class="form">
+                        <tr>
+                            <th class="formTitle">IP地址</th>@*数据库名*@
+                            <td class="formValue">
+                                <input id="F_IP" name="F_IP" type="text" class="form-control required" placeholder="请输入用户名" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="formTitle">用户名</th>@*备份名*@
+                            <td class="formValue">
+                                <input id="UserName" name="UserName" type="text" class="form-control required" placeholder="请输入用户名" />
+                            </td>
+                        </tr>
+                        @*<tr>
+                        <th class="formTitle">备份模式</th>
+                        <td class="formValue">
+                            <select id="F_BackupType" name="F_BackupType" class="form-control required">
+                                <option value="1">完整备份</option>
+                                <option value="2">差异备份</option>
+                            </select>
+                        </td>
+                    </tr>*@
+                        <tr>
+                            <th class="formTitle">用户名</th>@*备份名*@
+                            <td class="formValue">
+                                <input id="Password" name="Password" type="password" class="form-control required" placeholder="请输入密码" />
+                            </td>
+                        </tr>
+                        @*<tr>
+                        <th class="formTitle" valign="top" style="padding-top: 11px;">
+                            备份说明
+                        </th>
+                        <td class="formValue">
+                            <textarea id="F_Description" name="F_Description" class="form-control" style="height: 60px;"></textarea>
+                        </td>
+                    </tr>*@
+                    </table>
+                </div>
+            </div>
+            <div class="step-pane" id="step-2">
+                <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
+                    <div style="margin-bottom: 0px; border-radius: 0px;" class="alert alert-warning alert-dismissable">
+                        <strong>注意：</strong>&nbsp;备份成功后，请将备份文件下载到本地保存！
+                    </div>
+                    <div style="padding-top: 20px; margin-right: 20px;">
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle">数据库名</th>@*数据库名*@
+                                <td class="formValue">
+                                    <select id="F_DbName" name="F_DbName" class="form-control required">
+                                        <option value="Base">Base</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">备份名</th>@*备份名*@
+                                <td class="formValue">
+                                    <input id="F_FileName" name="F_FileName" type="text" class="form-control required" value="@.Code.Common.CreateNo()" placeholder="请输入用户名" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">备份模式</th>
+                                <td class="formValue">
+                                    <select id="F_BackupType" name="F_BackupType" class="form-control required">
+                                        <option value="1">完整备份</option>
+                                        <option value="2">差异备份</option>
+                                    </select>
+                                </td>
+                            </tr>
+                          
+                            <tr>
+                                <th class="formTitle" valign="top" style="padding-top: 11px;">
+                                    备份说明
+                                </th>
+                                <td class="formValue">
+                                    <textarea id="F_Description" name="F_Description" class="form-control" style="height: 60px;"></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="form-button" id="wizard-actions">
+                <a id="btn_last" disabled class="btn btn-default btn-prev">上一步</a>
+                <a id="btn_next" class="btn btn-default btn-next">下一步</a>
+                <a id="btn_finish" class="btn btn-default" style="display: none;" onclick="submitForm()">完成</a>
+            </div>
+        </div>
+</form>
+

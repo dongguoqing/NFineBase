@@ -1,0 +1,227 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    $(function () {
+        initControl();
+        gridList();
+    })
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/SystemManage/File/GetGridJson",
+            height: $(window).height() - 128,
+            colModel: [
+                { label: '序号', name: 'F_Id', hidden: true },
+                {
+                    label: '名称', name: 'F_FileName', width: 200, align: 'left', formatter: function (cellvalue, options, rowObject) {
+                        return "<a href='/UploadFile/rvt/" + cellvalue + "'>" + cellvalue + "</a>";
+                    }
+                },
+               { label: '大小', name: 'F_FileMax', width: 80, align: 'left' },
+               { label: '版本', name: 'F_FileVersion', width: 80, align: 'left' },
+               { label: '修改时间', name: 'F_UploadDate', width: 120, align: 'left' },
+               { label: '更新人', name: 'F_UploadUser', width: 200, align: 'left' },
+            ],
+            pager: "#gridPager",
+            sortname: 'F_Id asc,F_UploadDate desc',
+            viewrecords: true
+        });
+        $("#btn_search").click(function () {
+            $gridList.jqGrid('setGridParam', {
+                postData: { keyword: $("#txt_keyword").val() },
+            }).trigger('reloadGrid');   
+        });
+    }
+    function btn_add() {
+        $.modalOpen({
+            id: "Form",
+            title: "新增新闻",
+            url: "/SystemManage/File/Form",
+            width: "700px",
+            height: "510px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_edit() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        $.modalOpen({
+            id: "Form",
+            title: "修改用户",
+            url: "/SystemManage/News/Form?keyValue=" + keyValue,
+            width: "700px",
+            height: "510px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_delete() {
+        $.deleteForm({
+            url: "/SystemManage/News/DeleteForm",
+            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        $.modalOpen({
+            id: "Details",
+            title: "查看用户",
+            url: "/SystemManage/News/Details?keyValue=" + keyValue,
+            width: "700px",
+            height: "550px",
+            btn: null,
+        });
+    }
+
+    function btn_enabled() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        $.modalConfirm("注：您确定要【撤销】该条新闻的状态吗？", function (r) {
+            if (r) {
+                $.submitForm({
+                    url: "/SystemManage/News/DisabledNews",
+                    param: { keyValue: keyValue },
+                    success: function () {
+                        $.currentWindow().$("#gridList").trigger("reloadGrid");
+                    }
+                })
+            }
+        });
+    }
+
+    function AddDirectory()
+    {
+        $.modalOpen({
+            id: "Form",
+            width:"400px",
+            height: "200px",
+            url: "/SystemManage/File/Directory",
+            title: "新增文件夹",
+            btn: ['确认', '关闭'],
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            },
+            yes: function () {
+            }
+        })
+    }
+   
+
+    function initControl() {
+        $("#permissionTree").treeview({
+            height: 493,
+            showcheck: false,
+            url: "/SystemManage/File/GetPermissionTree",
+            param: {}
+        });
+    }
+
+</script>
+<div>
+    <div style="width:20%;display:inline-block">
+        <div class="topPanel" style="background-color:#ddd">
+            <div style="padding:0px 0 0 18px">
+                <i class="glyphicon glyphicon-folder-open" style="width:14px;height:14px;"></i>
+                <span style="margin-left:5px;">目录结构</span>
+                <div style="display:inline-block;margin-left:5%" onclick="AddDirectory()"> <i class="fa fa-plus"></i>新增</div>
+            </div>
+        </div>
+        <div class="step-content" id="wizard-steps" style="border-left: 1px solid #ddd ; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;background-color:white">
+            <div class="step-pane" id="step-2">
+                <div id="permissionTree"></div>
+            </div>
+        </div>
+    </div>
+    <div class="gridPanel" style="width:78%;float:right;display:inline-block">
+        <div class="toolbar">
+            <div class="topPanel">
+                <div class="search">
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="input-group">
+                                    <input id="txt_keyword" type="text" class="form-control" placeholder="文件名称" style="width: 200px;">
+                                    <span class="input-group-btn">
+                                        <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="display:inline-block;margin-left:40%">
+                    <div class="btn-group">
+                        <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+                    </div>
+                    <div class="btn-group">
+                        <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>上传文件</a>
+                    </div>
+                    <div class="operate">
+                        <ul class="nav nav-pills">
+                            <li class="first">已选中<span>1</span>项</li>
+                            <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a></li>
+                            <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a></li>
+                            <li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看</a></li>
+                            <li class="split"></li>
+                        </ul>
+                        <a href="javascript:;" class="close"></a>
+                    </div>
+                </div>
+            </div>
+
+            <script>$('.toolbar').authorizeButton()</script>
+        </div>
+        <table id="gridList"></table>
+        <div id="gridPager"></div>
+    </div>
+</div>
+@*<div class="topPanel">
+        <div class="toolbar">
+            <div class="btn-group">
+                <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+            </div>
+            <div class="btn-group">
+                <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>上传文件</a>
+            </div>
+            <div class="operate">
+                <ul class="nav nav-pills">
+                    <li class="first">已选中<span>1</span>项</li>
+                    <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a></li>
+                    <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a></li>
+                    <li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看</a></li>
+                    <li class="split"></li>
+                </ul>
+                <a href="javascript:;" class="close"></a>
+            </div>
+            <script>$('.toolbar').authorizeButton()</script>
+        </div>
+        <div style="width:25%">
+            <div id="permissionTree"></div>
+        </div>
+        <div style="width:70%;float:right">
+            <div class="search">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="input-group">
+                                <input id="txt_keyword" type="text" class="form-control" placeholder="文件名称" style="width: 200px;">
+                                <span class="input-group-btn">
+                                    <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+        <div class="gridPanel" >
+            <table id="gridList"></table>
+            <div id="gridPager"></div>
+        </div>*@

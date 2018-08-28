@@ -1,0 +1,38 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ assembly name="System.Data.dll" #>
+<#@ assembly name="System.Data.DataSetExtensions.dll" #>
+<#@ assembly name="System.Xml.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ include file="$(SolutionDir)NFine.Data\Extensions\DbHelperSecurity.ttinclude"  #>
+
+
+<# 
+    
+    
+ #>
+
+using System;
+namespace NFine.Domain.Entity.SystemSecurity
+{    
+
+<# foreach(string tableName in config.TableName.Split(new char[] { ','},StringSplitOptions.RemoveEmptyEntries)){#>
+    /// <summary>
+    /// <#=tableName#>
+    /// </summary>    
+    public class <#=tableName.Replace("Sys_","")+"Entity"#>:IEntity<<#=tableName.Replace("Sys_","")+"Entity"#>>, ICreationAudited, IDeleteAudited, IModificationAudited
+    {
+<# foreach(DbColumn column in DbHelper.GetDbColumns(config.ConnectionString, config.DbDatabase, tableName)){#>
+      public <#= column.CSharpType#><# if(column.CommonType.IsValueType && column.IsNullable){#>?<#}#> <#=column.ColumnName#> { get; set; }
+<#}#> 
+    }
+	<#}#> 
+}

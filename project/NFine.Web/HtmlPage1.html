@@ -1,0 +1,47 @@
+﻿
+<link rel="stylesheet" href="Content/js/simditor/css/editor.scss" />
+<link rel="stylesheet" href="Content/js/simditor/css/fonticon.scss" />
+<link rel="stylesheet" href="Content/js/simditor/css/simditor.css" />
+<link rel="stylesheet" href="Content/js/simditor/css/simditor.scss" />
+<script src="Content/js/jquery/jquery-2.1.1.min.js"></script>
+<script src="Content/js/simditor/js/mobilecheck.js"></script>
+<script src="Content/js/simditor/js/module.js"></script>
+<script src="Content/js/simditor/js/hotkeys.js"></script>
+<script src="Content/js/simditor/js/uploader.js"></script>
+<script src="Content/js/simditor/js/simditor.js"></script>
+<script src="Content/js/datepicker/DatePicker.js"></script>
+
+
+                        <!--<textarea id="F_Content" placeholder="BalaBala" name="F_Content" autofocus class="form-control" style="height: 60px;"></textarea>-->
+                 <iframe src="http://192.168.1.47:801/Risk/dpzs.html" style="width:400px;height:300px;"></iframe>
+<script>
+
+
+    (function () {
+        $(function () {
+            var $preview, editor, mobileToolbar, toolbar;
+            Simditor.locale = 'zh-CN';
+            toolbar = ['title', 'bold', 'italic', 'underline', 'strikethrough', 'fontScale', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent', 'alignment'];
+            mobileToolbar = ["bold", "underline", "strikethrough", "color", "ul", "ol"];
+            if (mobilecheck()) {
+                toolbar = mobileToolbar;
+            }
+            editor = new Simditor({
+                textarea: $('#F_Content'),
+                placeholder: '这里输入文字...',
+                toolbar: toolbar,
+                pasteImage: true,
+                defaultImage: 'assets/images/image.png',
+                upload:true
+            });
+            $preview = $('#preview');
+            if ($preview.length > 0) {
+                return editor.on('valuechanged', function (e) {
+                    return $preview.html(editor.getValue());
+                });
+            }
+        });
+
+    }).call(this);
+
+</script>

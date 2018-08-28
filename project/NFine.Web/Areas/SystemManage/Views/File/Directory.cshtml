@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+    })
+
+    function initControl() {
+        $("#F_ParentId").bindSelect({
+            url: "/SystemManage/File/GetSelectJson",
+        });
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            url: "/SystemManage/File/AddDirectory?keyValue=" + keyValue,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.currentWindow().location.reload();
+                $.currentWindow().$("#gridList").resetSelection();
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+
+<form id="form1">
+    <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tr>
+                <th class="formTitle">上级</th>
+                <td colspan="2" class="formValue">
+                    <select id="F_ParentId" name="F_ParentId" class="form-control required">
+                        <option value="0">父节点</option>
+                    </select>
+                </td>
+
+            </tr>
+            <tr>
+                <th class="formTitle" style="width:auto">名称</th>
+                <td class="formValue" colspan="3">
+                    <input id="F_FullName" name="F_FullName" type="text" class="form-control required" placeholder="请输入名称" />
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>

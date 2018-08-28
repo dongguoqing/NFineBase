@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<link rel="stylesheet" href="~/Content/js/simditor/css/editor.scss" />
+<link rel="stylesheet" href="~/Content/js/simditor/css/fonticon.scss" />
+<link rel="stylesheet" href="~/Content/js/simditor/css/simditor.css" />
+<link rel="stylesheet" href="~/Content/js/simditor/css/simditor.scss" />
+<script src="~/Content/js/simditor/js/module.min.js"></script>
+<script src="~/Content/js/simditor/js/hotkeys.min.js"></script>
+<script src="~/Content/js/simditor/js/uploader.min.js"></script>
+<script src="~/Content/js/simditor/js/simditor.js"></script>
+<script src="~/Content/js/datepicker/DatePicker.js"></script>
+<script type="text/javascript">
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if(!!keyValue)
+        {
+            $.ajax({
+                url: "/SystemManage/News/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    })
+
+    function initControl() {
+        $("#F_CategoryId").select2({ minimumResultsForSearch: -1 })
+        $("#F_Type").bindSelect({
+            url: "/SystemManage/News/GetNewsType",
+        });
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            url: "/SystemManage/News/SubmitForm?keyValue=" + keyValue,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.currentWindow().$("#gridList").resetSelection();
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<form id="form1">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#">基本信息</a></li>
+            @*<li role="presentation"><a href="#">扩展信息</a></li>*@
+        </ul>
+        <div style="padding-top: 20px; margin-right: 30px;">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">标题</th>
+                    <td class="formValue" colspan="3">
+                        <input id="F_Title" name="F_Title" type="text" class="form-control required" placeholder="请输入标题" />
+                    </td>
+                </tr>
+                <tr>
+                <tr>
+                    <th class="formTitle">作者</th>
+                    <td class="formValue">
+                        <input id="F_Author" name="F_Author" type="text" class="form-control" />
+                    </td>
+                    <th class="formTitle">发布时间</th>
+                    <td class="formValue">
+                        <input id="F_CreatorTime" name="F_CreatorTime" readonly type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">来源</th>
+                    <td class="formValue">
+                        <input id="F_From" name="F_From" type="text" class="form-control" />
+                    </td>
+                    <th class="formTitle">类别</th>
+                    <td class="formValue">
+                        <select id="F_Type" name="F_Type" class="form-control required">
+                        </select>
+                    </td>
+                </tr>
+               
+                <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 5px;">
+                        内容
+                    </th>
+                    <td class="formValue" colspan="3">
+                        <textarea id="F_Content" placeholder="这里填写内容..." name="F_Content" autofocus class="form-control" style="height: 60px;"></textarea>
+                    </td>
+                </tr>
+               
+            </table>
+        </div>
+    </div>
+</form>
+<script>
+
+
+    $(document).ready(function () {
+        //toolbar = ['title', 'bold', 'italic', 'underline', 'strikethrough', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'uploadImage', 'hr', '|', 'indent', 'outdent'];
+        var editor = new Simditor({
+            textarea: $("#F_Content"),
+            defaultImage:'',
+         //   toolbar: toolbar,
+            upload: {
+                url: "/SystemManage/News/UploadImg",
+                params: null,
+                filekey: 'fileDataFileName',
+                connectionCount: 3,
+                leaveConfirm: '正在上传文件'
+            }, success: function (data) {
+                alert(data)
+            }
+        })
+
+        $("#F_CreatorTime").click(function () {
+            setday(document.getElementById("F_CreatorTime"), null, null, null, 1);
+        })
+    })
+</script>

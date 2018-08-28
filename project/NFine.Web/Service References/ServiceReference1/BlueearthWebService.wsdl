@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="CreateTable">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProjectID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ProjectName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ProjectSign" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateTableResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateTableResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MySoapHeader" type="tns:MySoapHeader" />
+      <s:complexType name="MySoapHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="passWord" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="GetAllProject">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetAllProjectResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllProjectResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChangeProject">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProjectID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChangeProjectResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChangeProjectResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UploadBIM">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="fileUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileExt" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UploadBIMResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UploadBIMResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsSuccess">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileExt" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsSuccessResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IsSuccessResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PutInStorageConfigure">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProjectSign" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BeeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="x" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="y" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="z" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="VersionName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TreeName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PutInStorageConfigureResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PutInStorageConfigureResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="CreateTableSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateTable" />
+  </wsdl:message>
+  <wsdl:message name="CreateTableSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateTableResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateTableMySoapHeader">
+    <wsdl:part name="MySoapHeader" element="tns:MySoapHeader" />
+  </wsdl:message>
+  <wsdl:message name="GetAllProjectSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllProject" />
+  </wsdl:message>
+  <wsdl:message name="GetAllProjectSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllProjectMySoapHeader">
+    <wsdl:part name="MySoapHeader" element="tns:MySoapHeader" />
+  </wsdl:message>
+  <wsdl:message name="ChangeProjectSoapIn">
+    <wsdl:part name="parameters" element="tns:ChangeProject" />
+  </wsdl:message>
+  <wsdl:message name="ChangeProjectSoapOut">
+    <wsdl:part name="parameters" element="tns:ChangeProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="ChangeProjectMySoapHeader">
+    <wsdl:part name="MySoapHeader" element="tns:MySoapHeader" />
+  </wsdl:message>
+  <wsdl:message name="UploadBIMSoapIn">
+    <wsdl:part name="parameters" element="tns:UploadBIM" />
+  </wsdl:message>
+  <wsdl:message name="UploadBIMSoapOut">
+    <wsdl:part name="parameters" element="tns:UploadBIMResponse" />
+  </wsdl:message>
+  <wsdl:message name="UploadBIMMySoapHeader">
+    <wsdl:part name="MySoapHeader" element="tns:MySoapHeader" />
+  </wsdl:message>
+  <wsdl:message name="IsSuccessSoapIn">
+    <wsdl:part name="parameters" element="tns:IsSuccess" />
+  </wsdl:message>
+  <wsdl:message name="IsSuccessSoapOut">
+    <wsdl:part name="parameters" element="tns:IsSuccessResponse" />
+  </wsdl:message>
+  <wsdl:message name="IsSuccessMySoapHeader">
+    <wsdl:part name="MySoapHeader" element="tns:MySoapHeader" />
+  </wsdl:message>
+  <wsdl:message name="PutInStorageConfigureSoapIn">
+    <wsdl:part name="parameters" element="tns:PutInStorageConfigure" />
+  </wsdl:message>
+  <wsdl:message name="PutInStorageConfigureSoapOut">
+    <wsdl:part name="parameters" element="tns:PutInStorageConfigureResponse" />
+  </wsdl:message>
+  <wsdl:message name="PutInStorageConfigureMySoapHeader">
+    <wsdl:part name="MySoapHeader" element="tns:MySoapHeader" />
+  </wsdl:message>
+  <wsdl:portType name="BlueearthWebServiceSoap">
+    <wsdl:operation name="CreateTable">
+      <wsdl:input message="tns:CreateTableSoapIn" />
+      <wsdl:output message="tns:CreateTableSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllProject">
+      <wsdl:input message="tns:GetAllProjectSoapIn" />
+      <wsdl:output message="tns:GetAllProjectSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeProject">
+      <wsdl:input message="tns:ChangeProjectSoapIn" />
+      <wsdl:output message="tns:ChangeProjectSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UploadBIM">
+      <wsdl:input message="tns:UploadBIMSoapIn" />
+      <wsdl:output message="tns:UploadBIMSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IsSuccess">
+      <wsdl:input message="tns:IsSuccessSoapIn" />
+      <wsdl:output message="tns:IsSuccessSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PutInStorageConfigure">
+      <wsdl:input message="tns:PutInStorageConfigureSoapIn" />
+      <wsdl:output message="tns:PutInStorageConfigureSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BlueearthWebServiceSoap" type="tns:BlueearthWebServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateTable">
+      <soap:operation soapAction="http://tempuri.org/CreateTable" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:CreateTableMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllProject">
+      <soap:operation soapAction="http://tempuri.org/GetAllProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetAllProjectMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeProject">
+      <soap:operation soapAction="http://tempuri.org/ChangeProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ChangeProjectMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UploadBIM">
+      <soap:operation soapAction="http://tempuri.org/UploadBIM" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:UploadBIMMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsSuccess">
+      <soap:operation soapAction="http://tempuri.org/IsSuccess" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:IsSuccessMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PutInStorageConfigure">
+      <soap:operation soapAction="http://tempuri.org/PutInStorageConfigure" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:PutInStorageConfigureMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BlueearthWebServiceSoap12" type="tns:BlueearthWebServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateTable">
+      <soap12:operation soapAction="http://tempuri.org/CreateTable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:CreateTableMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllProject">
+      <soap12:operation soapAction="http://tempuri.org/GetAllProject" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetAllProjectMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeProject">
+      <soap12:operation soapAction="http://tempuri.org/ChangeProject" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ChangeProjectMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UploadBIM">
+      <soap12:operation soapAction="http://tempuri.org/UploadBIM" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:UploadBIMMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsSuccess">
+      <soap12:operation soapAction="http://tempuri.org/IsSuccess" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:IsSuccessMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PutInStorageConfigure">
+      <soap12:operation soapAction="http://tempuri.org/PutInStorageConfigure" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PutInStorageConfigureMySoapHeader" part="MySoapHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BlueearthWebService">
+    <wsdl:port name="BlueearthWebServiceSoap" binding="tns:BlueearthWebServiceSoap">
+      <soap:address location="http://192.168.1.47:2000/BlueearthWebService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="BlueearthWebServiceSoap12" binding="tns:BlueearthWebServiceSoap12">
+      <soap12:address location="http://192.168.1.47:2000/BlueearthWebService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
